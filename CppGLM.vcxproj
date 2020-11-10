@@ -72,7 +72,7 @@
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>D:\Dev Project\GamagoraGL\CImg\include;D:\Dev Project\GamagoraGL\glad\include;D:\Dev Project\GamagoraGL\tinyply\include;$(IncludePath)</IncludePath>
+    <IncludePath>D:\Dev Project\GamagoraGL\CImg\include;D:\Dev Project\GamagoraGL\glad\include;D:\Dev Project\GamagoraGL\tinyply\include;D:\Dev Project\GamagoraGL\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>

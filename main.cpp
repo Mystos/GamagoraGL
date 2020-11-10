@@ -1,6 +1,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/vec3.hpp>
+#include "stl.h"
+
 
 #include <vector>
 #include <iostream>
@@ -163,7 +165,14 @@ int main(void)
 	glDebugMessageCallback(opengl_error_callback, nullptr);
 
 	const size_t nParticules = 1000;
-	auto particules = MakeParticules(nParticules);
+	//auto particules = MakeParticules(nParticules);
+	auto triangles = ReadStl("logo.stl");
+
+	if (triangles.size() <= 0) {
+		std::cerr << "Error Import: Il y a eu un érreur lors de l'import" << std::endl;
+	}
+	std::cerr << "Info Import : NbrTriangle = " << triangles.size() << std::endl;
+
 
 	// Shader
 	const auto vertex = MakeShader(GL_VERTEX_SHADER, "shader.vert");
@@ -181,7 +190,8 @@ int main(void)
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_STATIC_DRAW);
+	//glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle) * triangles.size(), triangles.data(), GL_STATIC_DRAW);
 
 	// Bindings
 	const auto index = glGetAttribLocation(program, "position");
