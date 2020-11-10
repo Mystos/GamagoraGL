@@ -221,7 +221,7 @@ int main(void)
 
 		glViewport(0, 0, width, height);
 
-		for (int i = 0; i < particules.size(); i++)
+		/*for (int i = 0; i < particules.size(); i++)
 		{
 			particules[i].position += particules[i].speed * 0.5f;
 
@@ -231,9 +231,9 @@ int main(void)
 				particules[i].position = glm::vec3((xpos / width)*2-1, ((ypos / height) * 2 - 1) *-1 , 1);
 				particules[i].speed = glm::vec3(0.,0.,0.);
 			}
-		}
+		}*/
 
-		glBufferSubData(GL_ARRAY_BUFFER, 0, particules.size() * sizeof(Particule), particules.data());
+		//glBufferSubData(GL_ARRAY_BUFFER, 0, particules.size() * sizeof(Particule), particules.data());
 
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(0.5f, 0.8f, 0.3f, 1.0f);
