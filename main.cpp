@@ -28,6 +28,7 @@ struct Particule {
 	glm::vec3 position;
 	glm::vec3 color;
 	glm::vec3 speed;
+	float size;
 };
 
 std::vector<Particule> MakeParticules(const int n)
@@ -52,7 +53,8 @@ std::vector<Particule> MakeParticules(const int n)
 				distribution01(generator),
 				distribution01(generator)
 				},
-				{0.f, 0.f, 0.f}
+				{0.f, 0.f, 0.f},
+				distribution01(generator)
 				});
 	}
 
@@ -161,7 +163,7 @@ int main(void)
 	glDebugMessageCallback(opengl_error_callback, nullptr);
 
 	const size_t nParticules = 1000;
-	const auto particules = MakeParticules(nParticules);
+	auto particules = MakeParticules(nParticules);
 
 	// Shader
 	const auto vertex = MakeShader(GL_VERTEX_SHADER, "shader.vert");
@@ -187,17 +189,54 @@ int main(void)
 	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), nullptr);
 	glEnableVertexAttribArray(index);
 
-	glPointSize(20.f);
+	const auto index_color = glGetAttribLocation(program, "color");
+	glVertexAttribPointer(index_color, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), (void*)sizeof(glm::vec3));
+	glEnableVertexAttribArray(index_color);
 
+	const auto index_speed = glGetAttribLocation(program, "speed");
+	glVertexAttribPointer(index_speed, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), reinterpret_cast<GLvoid*>(offsetof(Particule, speed)));
+	glEnableVertexAttribArray(index_speed);
+
+	const auto index_size = glGetAttribLocation(program, "size");
+	glVertexAttribPointer(index_size, 1, GL_FLOAT, GL_FALSE, sizeof(Particule), reinterpret_cast<GLvoid*>(offsetof(Particule, size)));
+	glEnableVertexAttribArray(index_size);
+
+	glEnable(GL_PROGRAM_POINT_SIZE);
 	while (!glfwWindowShouldClose(window))
 	{
+
+		// Get mouse position
+		double xpos, ypos;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		//glUniform2d(glGetUniformLocation(program, "mousePos"), xpos, ypos);
+
+
+		float t = glfwGetTime();
+		//glUniform1f(glGetUniformLocation(program, "time"), t);
+
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 
+
+
 		glViewport(0, 0, width, height);
 
+		for (int i = 0; i < particules.size(); i++)
+		{
+			particules[i].position += particules[i].speed * 0.5f;
+
+			particules[i].speed += + 0.5f * 9.8f * glm::vec3(0, -0.0001, 0);
+
+			if (particules[i].position.y < -1) {
+				particules[i].position = glm::vec3((xpos / width)*2-1, ((ypos / height) * 2 - 1) *-1 , 1);
+				particules[i].speed = glm::vec3(0.,0.,0.);
+			}
+		}
+
+		glBufferSubData(GL_ARRAY_BUFFER, 0, particules.size() * sizeof(Particule), particules.data());
+
 		glClear(GL_COLOR_BUFFER_BIT);
-		// glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(0.5f, 0.8f, 0.3f, 1.0f);
 
 		glDrawArrays(GL_POINTS, 0, nParticules);
 
