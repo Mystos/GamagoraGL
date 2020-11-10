@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{F42541B6-8A90-4B9D-809B-6D95E5790AC7}</ProjectGuid>
+    <Keyword>MakeFileProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Makefile</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <NMakeBuildCommandLine>buildInputs = [glfw glm cimg]%3b</NMakeBuildCommandLine>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <IncludePath>D:\Dev Project\GamagoraGL\CImg\include;D:\Dev Project\GamagoraGL\glad\include;D:\Dev Project\GamagoraGL\tinyply\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <NMakeBuildCommandLine>buildInputs = [glfw glm cimg]%3b</NMakeBuildCommandLine>
+    <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>D:\Dev Project\GamagoraGL\CImg\include;D:\Dev Project\GamagoraGL\glad\include;D:\Dev Project\GamagoraGL\tinyply\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="glad\src\glad.c" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stl.cpp" />
+    <ClCompile Include="texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cimg\include\CImg.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\add_fileformat.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\bayer.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\chlpca.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\cvMat.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\draw_gradient.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\inpaint.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\ipl.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\ipl_alt.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\jpeg_buffer.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\loop_macros.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\matlab.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\nlmeans.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\skeleton.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\tiff_stream.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\tinymatwriter.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\vrml.h" />
+    <ClInclude Include="cimg\include\cimg\plugins\vtk.h" />
+    <ClInclude Include="glad\include\glad\glad.h" />
+    <ClInclude Include="glad\include\khr\khrplatform.h" />
+    <ClInclude Include="stl.h" />
+    <ClInclude Include="texture.h" />
+    <ClInclude Include="tinyply\include\tinyply.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\glm.0.9.9.800\build\native\glm.targets" Condition="Exists('packages\glm.0.9.9.800\build\native\glm.targets')" />
+    <Import Project="packages\glfw.3.3.2\build\native\glfw.targets" Condition="Exists('packages\glfw.3.3.2\build\native\glfw.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Ce projet fait référence à des packages NuGet qui sont manquants sur cet ordinateur. Utilisez l'option de restauration des packages NuGet pour les télécharger. Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkID=322105. Le fichier manquant est : {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\glm.0.9.9.800\build\native\glm.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\glm.0.9.9.800\build\native\glm.targets'))" />
+    <Error Condition="!Exists('packages\glfw.3.3.2\build\native\glfw.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\glfw.3.3.2\build\native\glfw.targets'))" />
+  </Target>
+</Project>
