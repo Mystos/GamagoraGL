@@ -1,27 +1,21 @@
 #version 450
 uniform float time;
 uniform vec2 mousePos;
+uniform mat4 trans;
 
-in vec3 position;
-in vec3 color;
-in vec3 speed;
-in float size;
+in vec3 pos;
+in vec2 vertexUV;
 
+out vec2 uv;
+out  vec3 v_position;
 out vec3 particule_color;
 
 void main()
 {
-    float r = length(position.xy);
+    uv = vertexUV;
+    gl_PointSize = 5;
 
-    gl_PointSize = size * 40;
-
-
-    //float x = cos(time*r)*r;
-    //float y = sin(time*r)*r;
-
-    gl_Position = vec4(position,1.0) ;
-
-    //gl_Position = vec4(position * sin(time), 1.0);
-
-    particule_color = vec3(color);
+    gl_Position = trans * vec4(pos,1.0);
+    v_position= gl_Position;
+    particule_color = vec3(1.0,0.,0.);
 }

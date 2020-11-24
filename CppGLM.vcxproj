@@ -103,12 +103,19 @@
     <ClInclude Include="cimg\include\cimg\plugins\vtk.h" />
     <ClInclude Include="glad\include\glad\glad.h" />
     <ClInclude Include="glad\include\khr\khrplatform.h" />
+    <ClInclude Include="objLoader\OBJ_Loader.h" />
     <ClInclude Include="stl.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="tinyply\include\tinyply.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="logo.stl" />
     <None Include="packages.config" />
+    <None Include="shader.frag" />
+    <None Include="shader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="result.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

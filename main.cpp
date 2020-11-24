@@ -1,8 +1,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/vec3.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include "stl.h"
-
+#include <glm/glm.hpp>
+#include <objLoader/OBJ_Loader.h>
 
 #include <vector>
 #include <iostream>
@@ -13,6 +16,7 @@
 
 #define TINYPLY_IMPLEMENTATION
 #include <tinyply.h>
+#include <texture.h>
 
 static void error_callback(int /*error*/, const char* description)
 {
@@ -166,13 +170,32 @@ int main(void)
 
 	const size_t nParticules = 1000;
 	//auto particules = MakeParticules(nParticules);
-	auto triangles = ReadStl("logo.stl");
+	/*auto triangles = ReadStl("logo.stl");*/
 
-	if (triangles.size() <= 0) {
+	objl::Loader loader;
+	bool loaded = loader.LoadFile("Statuette.obj");
+	auto triangles = loader.LoadedVertices;
+	auto indices = loader.LoadedIndices;
+
+	if (!loaded) {
 		std::cerr << "Error Import: Il y a eu un érreur lors de l'import" << std::endl;
 	}
 	std::cerr << "Info Import : NbrTriangle = " << triangles.size() << std::endl;
 
+
+
+
+	Image image = LoadImage("result.bmp");
+	//Image image = LoadImage("sheep_normal.bmp");
+	glEnable(GL_DEPTH_TEST);
+
+	GLuint tex;
+	glCreateTextures(GL_TEXTURE_2D, 1, &tex);
+	glTextureStorage2D(tex, 1, GL_RGB8, image.width, image.height);
+
+	GLuint texUnit = 0;
+	glTextureSubImage2D(tex, 0, 0, 0, image.width, image.height, GL_RGB, GL_UNSIGNED_BYTE, image.data.data());
+	glBindTextureUnit(texUnit, tex);
 
 	// Shader
 	const auto vertex = MakeShader(GL_VERTEX_SHADER, "shader.vert");
@@ -191,43 +214,52 @@ int main(void)
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	//glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_STATIC_DRAW);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Triangle) * triangles.size(), triangles.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(objl::Vertex) * triangles.size(), triangles.data(), GL_STATIC_DRAW);
 
 	// Bindings
-	const auto index = glGetAttribLocation(program, "position");
-
-	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), nullptr);
+	const auto index = glGetAttribLocation(program, "pos");
+	glVertexAttribPointer(index, 3, GL_FLOAT, GL_FALSE, sizeof(objl::Vertex), 0);
 	glEnableVertexAttribArray(index);
 
-	const auto index_color = glGetAttribLocation(program, "color");
-	glVertexAttribPointer(index_color, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), (void*)sizeof(glm::vec3));
-	glEnableVertexAttribArray(index_color);
+	const auto index_uv = glGetAttribLocation(program, "vertexUV");
+	glVertexAttribPointer(index_uv, 2, GL_FLOAT, GL_FALSE, sizeof(objl::Vertex), (void*)offsetof(objl::Vertex, TextureCoordinate));
+	glEnableVertexAttribArray(index_uv);
 
-	const auto index_speed = glGetAttribLocation(program, "speed");
-	glVertexAttribPointer(index_speed, 3, GL_FLOAT, GL_FALSE, sizeof(Particule), reinterpret_cast<GLvoid*>(offsetof(Particule, speed)));
-	glEnableVertexAttribArray(index_speed);
 
-	const auto index_size = glGetAttribLocation(program, "size");
-	glVertexAttribPointer(index_size, 1, GL_FLOAT, GL_FALSE, sizeof(Particule), reinterpret_cast<GLvoid*>(offsetof(Particule, size)));
-	glEnableVertexAttribArray(index_size);
+	// Buffers
+	GLuint indexVertBuffer;
+	glGenBuffers(1, &indexVertBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexVertBuffer);
+	//glBufferData(GL_ARRAY_BUFFER, nParticules * sizeof(Particule), particules.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), indices.data(), GL_STATIC_DRAW);
 
 	glEnable(GL_PROGRAM_POINT_SIZE);
 	while (!glfwWindowShouldClose(window))
 	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Get mouse position
 		double xpos, ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		//glUniform2d(glGetUniformLocation(program, "mousePos"), xpos, ypos);
 
+		//Bind Texture
+		//auto id = glGetUniformLocation(program, "tex");
+		//glUniform1i(id, texUnit);
 
 		float t = glfwGetTime();
-		//glUniform1f(glGetUniformLocation(program, "time"), t);
+		glUniform1f(glGetUniformLocation(program, "time"), t);
 
 		int width, height;
 		glfwGetFramebufferSize(window, &width, &height);
 
-
+		glm::mat4 trans(1);
+		trans = glm::scale(trans, glm::vec3(0.3f, 0.3f, 0.3f));
+		trans *= glm::rotate(trans,
+			t * glm::radians(180.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f)
+		);
+		glUniformMatrix4fv(glGetUniformLocation(program, "trans"), 1, GL_FALSE, glm::value_ptr(trans));
 
 		glViewport(0, 0, width, height);
 
@@ -248,8 +280,9 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);
 		glClearColor(0.5f, 0.8f, 0.3f, 1.0f);
 
-		glDrawArrays(GL_POINTS, 0, nParticules);
-
+		//glDrawArrays(GL_POINTS, 0, triangles.size());
+		glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

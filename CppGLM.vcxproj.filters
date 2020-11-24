@@ -98,8 +98,19 @@
     <ClInclude Include="tinyply\include\tinyply.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="objLoader\OBJ_Loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="shader.frag" />
+    <None Include="shader.vert" />
+    <None Include="logo.stl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="result.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
