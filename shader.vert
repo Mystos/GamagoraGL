@@ -16,6 +16,6 @@ void main()
     gl_PointSize = 5;
 
     gl_Position = trans * vec4(pos,1.0);
-    v_position= gl_Position;
+    //v_position = gl_Position;
     particule_color = vec3(1.0,0.,0.);
 }
